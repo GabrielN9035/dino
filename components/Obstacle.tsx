@@ -1,14 +1,17 @@
+import { useGame } from "@/hooks/gameHook";
 import { useEffect } from "react";
 import { Dimensions, Easing, Image, StyleSheet } from "react-native";
 import Animated, {
-    useAnimatedStyle,
-    useSharedValue,
-    withTiming,
+  useAnimatedReaction,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
 } from "react-native-reanimated";
 
 export default function Obstacle({ onEnd }: any) {
   const { width } = Dimensions.get("window");
   const offset = useSharedValue(0);
+  const { dinoheight } = useGame();
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: -offset.value }],
@@ -24,6 +27,24 @@ export default function Obstacle({ onEnd }: any) {
       onEnd,
     );
   }, []);
+
+  useAnimatedReaction(
+    () => {
+      return offset.value;
+    },
+    (currentValue) => {
+      const left = Math.max(50, width - currentValue);
+      const right = Math.min(80, width - currentValue + 65);
+      const bottom = Math.max(0, dinoheight.value);
+      const top = 65;
+
+      if (left > right || bottom > top) {
+        console.log("No collision");
+        return;
+      }
+      console.log("Collision");
+    },
+  );
 
   return (
     <Animated.View style={[styles.obstacle, animatedStyle]}>

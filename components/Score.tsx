@@ -7,7 +7,7 @@ export default function Score() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setScore((oldState: any) => oldState + 10);
+      setScore((oldState: any) => oldState + 1);
     }, 1000);
     return () => clearInterval(interval);
   }, []);
