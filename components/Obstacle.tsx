@@ -1,3 +1,6 @@
+import cactusBitmap from "@/assets/bitmaps/cactus.json";
+import dinoJumpingBitmap from "@/assets/bitmaps/dino.json";
+import dinoMovingBitmap from "@/assets/bitmaps/dino_moving.json";
 import { useGame } from "@/hooks/gameHook";
 import { useEffect } from "react";
 import { Dimensions, Easing, Image, StyleSheet } from "react-native";
@@ -33,16 +36,43 @@ export default function Obstacle({ onEnd }: any) {
       return offset.value;
     },
     (currentValue) => {
-      const left = Math.max(50, width - currentValue);
-      const right = Math.min(80, width - currentValue + 65);
+      const cactusPosition = width - Math.round(currentValue);
+      const left = Math.max(50, cactusPosition);
+      const right = Math.min(130, cactusPosition + 65);
       const bottom = Math.max(0, dinoheight.value);
       const top = 65;
 
       if (left > right || bottom > top) {
-        console.log("No collision");
         return;
       }
       console.log("Collision");
+      for (let x = left; x < right; x++) {
+        for (let y = bottom; y < top; y++) {
+          console.log(x, y);
+          const xDino = x - 50;
+          const xCactus = x - cactusPosition;
+          const yDino = 80 - (y - dinoheight.value);
+          const yCactus = 65 - y;
+
+          const dinoBitmap =
+            dinoheight.value > 0 ? dinoJumpingBitmap : dinoMovingBitmap;
+
+          if (
+            xDino < 80 &&
+            xDino > -1 &&
+            yDino < 80 &&
+            yDino > -1 &&
+            xCactus < 65 &&
+            xCactus > -1 &&
+            yCactus < 65 &&
+            yCactus > -1 &&
+            dinoBitmap[xDino][yDino] &&
+            cactusBitmap[xCactus][yCactus]
+          ) {
+            console.log("Pixel collision");
+          }
+        }
+      }
     },
   );
 
