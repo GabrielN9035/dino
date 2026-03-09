@@ -2,6 +2,7 @@ import cactusBitmap from "@/assets/bitmaps/cactus.json";
 import dinoJumpingBitmap from "@/assets/bitmaps/dino.json";
 import dinoMovingBitmap from "@/assets/bitmaps/dino_moving.json";
 import { useGame } from "@/hooks/gameHook";
+import { router } from "expo-router";
 import { useEffect } from "react";
 import { Dimensions, Easing, Image, StyleSheet } from "react-native";
 import Animated, {
@@ -69,7 +70,7 @@ export default function Obstacle({ onEnd }: any) {
             dinoBitmap[xDino][yDino] &&
             cactusBitmap[xCactus][yCactus]
           ) {
-            console.log("Pixel collision");
+            router.push("/end");
           }
         }
       }
